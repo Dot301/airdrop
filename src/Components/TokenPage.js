@@ -2,6 +2,36 @@ import React, { useState } from 'react'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import { Modal } from '@mui/material';
 import NewToken from './NewToken';
+import Tokens from './Tokens';
+
+const DATA = [
+    {
+    symbol: "ETH",
+    name: "Ethereum",
+    decimal: 5,
+    supply: 100000},
+    {
+    symbol: "ETH",
+    name: "Ethereum",
+    decimal: 5,
+    supply: 100000},
+    {
+    symbol: "ETH",
+    name: "Ethereum",
+    decimal: 5,
+    supply: 100000},
+    {
+    symbol: "ETH",
+    name: "Ethereum",
+    decimal: 5,
+    supply: 100000},
+    {
+    symbol: "ETH",
+    name: "Ethereum",
+    decimal: 5,
+    supply: 100000},
+
+]
 
 function TokenPage() {
 
@@ -35,7 +65,15 @@ function TokenPage() {
                         <button type='button' onClick={handleOpen}>Generate New</button>
                     </div>
                 </div>
-                <div className='bg-red-900'>
+                <div className='h-screen flex'>
+                    <div className='tokentitle mx-10 text-3xl font-mono'>All your tokens.</div>
+                    <div className='tokens w-3/4 h-3/4 border border-red-500 rounded-lg grid grid-cols-5 overflow-scroll'>
+                        {
+                            DATA.map((data,index)=>{
+                                return (<Tokens data={data} key={index}/>);
+                            })
+                        }
+                    </div>
                 </div>
             </div>
             <Modal
