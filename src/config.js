@@ -1,5 +1,6 @@
-export const tokenFactoryContractAddress = "0x975Cd6F8B680f8c0Ce9220DeE0192FAD3b4b27E2";
-// tokenContractAddress = "0xBec96dA54cb7070D3ba613d01C69D437CDb66f51";
+// import {TOKEN_FACTORY_CONTRACT_ADDRESS} from '../../.env'
+
+export const tokenFactoryContractAddress = "0x8c4Ad5F65A37984024f13bd6983eaAA3831DB833";
 
 export const TokenFactoryContract_ABI = [
   {

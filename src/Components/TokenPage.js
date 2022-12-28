@@ -6,35 +6,6 @@ import Tokens from './Tokens';
 import {tokenFactoryContractAddress,TokenFactoryContract_ABI,TokenContract_ABI} from '../config'
 const {ethers, Contract, BigNumber} = require('ethers');
 
-// const DATA = [
-//     {
-//     symbol: "ETH",
-//     name: "Ethereum",
-//     decimal: 5,
-//     supply: 100000},
-//     {
-//     symbol: "ETH",
-//     name: "Ethereum",
-//     decimal: 5,
-//     supply: 100000},
-//     {
-//     symbol: "ETH",
-//     name: "Ethereum",
-//     decimal: 5,
-//     supply: 100000},
-//     {
-//     symbol: "ETH",
-//     name: "Ethereum",
-//     decimal: 5,
-//     supply: 100000},
-//     {
-//     symbol: "ETH",
-//     name: "Ethereum",
-//     decimal: 5,
-//     supply: 100000},
-
-// ]
-
 function TokenPage(props) {
 
     const [open, setOpen] = useState(false);
@@ -48,7 +19,6 @@ function TokenPage(props) {
             tokenfactory = new ethers.Contract(tokenFactoryContractAddress,TokenFactoryContract_ABI,props.provid);
             data = await tokenfactory.tokenslist();
             fetchTokenData(data)
-            return  data;
         }
         load();
     },[props.provid])
@@ -64,11 +34,11 @@ function TokenPage(props) {
 
 
     const fetchTokenData = async (_data) =>{
-        console.log(_data)
+        // console.log(_data)
         let tokenAddressInstance;
         let _totalSupply,_totalSupplyHex;
         let _decimals,_name,_symbol;
-        for(let i=0;i<_data.length;i++){
+        for(let i=_data.length-1;i>=0;i--){
             tokenAddressInstance = new Contract(_data[i],TokenContract_ABI,props.provid);
             _totalSupplyHex = BigNumber.from((await tokenAddressInstance.totalSupply()).toString())
             _totalSupply = parseInt(_totalSupplyHex._hex)
