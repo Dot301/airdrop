@@ -1,43 +1,60 @@
-import React, { useState } from 'react'
+import React, { Children, useEffect, useState } from 'react'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import { Modal } from '@mui/material';
 import NewToken from './NewToken';
 import Tokens from './Tokens';
+import {tokenFactoryContractAddress,TokenFactoryContract_ABI,TokenContract_ABI} from '../config'
+const {ethers, Contract, BigNumber} = require('ethers');
 
-const DATA = [
-    {
-    symbol: "ETH",
-    name: "Ethereum",
-    decimal: 5,
-    supply: 100000},
-    {
-    symbol: "ETH",
-    name: "Ethereum",
-    decimal: 5,
-    supply: 100000},
-    {
-    symbol: "ETH",
-    name: "Ethereum",
-    decimal: 5,
-    supply: 100000},
-    {
-    symbol: "ETH",
-    name: "Ethereum",
-    decimal: 5,
-    supply: 100000},
-    {
-    symbol: "ETH",
-    name: "Ethereum",
-    decimal: 5,
-    supply: 100000},
+// const DATA = [
+//     {
+//     symbol: "ETH",
+//     name: "Ethereum",
+//     decimal: 5,
+//     supply: 100000},
+//     {
+//     symbol: "ETH",
+//     name: "Ethereum",
+//     decimal: 5,
+//     supply: 100000},
+//     {
+//     symbol: "ETH",
+//     name: "Ethereum",
+//     decimal: 5,
+//     supply: 100000},
+//     {
+//     symbol: "ETH",
+//     name: "Ethereum",
+//     decimal: 5,
+//     supply: 100000},
+//     {
+//     symbol: "ETH",
+//     name: "Ethereum",
+//     decimal: 5,
+//     supply: 100000},
 
-]
+// ]
 
-function TokenPage() {
+function TokenPage(props) {
 
     const [open, setOpen] = useState(false);
+    const [_data, setData] = useState([]);
+    const [_tokenfactory,setTokenFactory] = useState();
+    let data1 = new Set();
+    useEffect(()=>{
+        if(props.provid == undefined) return 
+        const load = async ()=>{
+            let tokenfactory, data;
+            tokenfactory = new ethers.Contract(tokenFactoryContractAddress,TokenFactoryContract_ABI,props.provid);
+            data = await tokenfactory.tokenslist();
+            fetchTokenData(data)
+            return  data;
+        }
+        load();
+    },[props.provid])
 
     const handleOpen = () => {
+        // console.log(props.accou)
         setOpen(true);
     };
 
@@ -45,6 +62,25 @@ function TokenPage() {
         setOpen(false);
     };
 
+
+    const fetchTokenData = async (_data) =>{
+        console.log(_data)
+        let tokenAddressInstance;
+        let _totalSupply,_totalSupplyHex;
+        let _decimals,_name,_symbol;
+        for(let i=0;i<_data.length;i++){
+            tokenAddressInstance = new Contract(_data[i],TokenContract_ABI,props.provid);
+            _totalSupplyHex = BigNumber.from((await tokenAddressInstance.totalSupply()).toString())
+            _totalSupply = parseInt(_totalSupplyHex._hex)
+            _decimals = await tokenAddressInstance.decimals()
+            _symbol = await tokenAddressInstance.symbol()
+            _name = await tokenAddressInstance.name()
+            data1.add({"totalSupply" : _totalSupply, "decimals" : _decimals, "name" : _name,"symbol" : _symbol})
+            // setData(Array.from(data1))
+        }
+        // console.log(data1)
+        setData(Array.from(data1))
+    }
 
     return (
         <>
@@ -69,7 +105,7 @@ function TokenPage() {
                     <div className='tokentitle mx-10 text-3xl font-mono'>All your tokens.</div>
                     <div className='tokens w-3/4 h-3/4 border border-red-500 rounded-lg grid grid-cols-5 overflow-scroll'>
                         {
-                            DATA.map((data,index)=>{
+                            _data.map((data,index)=>{
                                 return (<Tokens data={data} key={index}/>);
                             })
                         }
@@ -83,7 +119,7 @@ function TokenPage() {
                 aria-describedby="simple-modal-description"
             >
                 <div>
-                    <NewToken />
+                    <NewToken provider={props.provid}  account={props.accou} signer={props.sign} close={handleClose}/>
                 </div>
             </Modal>
         </>

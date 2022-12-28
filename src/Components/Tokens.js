@@ -7,19 +7,19 @@ function Tokens({data}) {
             {/* <div className='imgbx'>
                 <img src="https://assets.codepen.io/4164355/shoes.png" className='w-[80%]'/>
             </div> */}
-            <div className='contentbx'>
+            <div className='contentbx flex flex-col justify-center items-center my-20'>
                 <h2>{data.name}</h2>
-                <div className='symbol'>
-                    <h3>Symbol :</h3>
+                <div className='symbol flex flex-row'>
+                    <h3>Symbol &nbsp;&nbsp;:&nbsp;&nbsp;</h3>
                     <span>{data.symbol}</span>
                 </div>
-                <div className='decimal'>
-                    <h3>Decimal :</h3>
-                    <span>{data.decimal}</span>
+                <div className='decimal flex flex-row'>
+                    <h3>Decimal &nbsp;:&nbsp;&nbsp;</h3>
+                    <span>{data.decimals}</span>
                 </div>
-                <div className='supply'>
-                    <h3>Supply :</h3>
-                    <span>{data.supply}</span>
+                <div className='supply flex flex-row'>
+                    <h3>Supply &nbsp;&nbsp;&nbsp;:&nbsp;&nbsp;</h3>
+                    <span>{data.totalSupply}</span>
                 </div>
             </div>
         </div>
