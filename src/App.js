@@ -18,6 +18,9 @@ import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { mainnet, polygon, optimism, arbitrum, goerli } from 'wagmi/chains';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
+import MerkleRootComponet from './Components/MerkleRoot';
+import CreateAirdrop from './Components/CreateAirdrop';
+import Airdrops from './Components/Airdrops';
 
 
 const { ethers } = require('ethers');
@@ -36,7 +39,7 @@ const { connectors } = getDefaultWallets({
 });
 
 const wagmiClient = createClient({
-  autoConnect: false,
+  autoConnect: true,
   connectors,
   provider
 })
@@ -47,6 +50,7 @@ function App() {
 
   const [provider, setProvider] = useState();
   const [signer, setSigner] = useState();
+  const [account, setAccount] = useState();
 
   useEffect(() => {
     loadetheracc();
@@ -56,8 +60,10 @@ function App() {
     // await window.ethereum.enable();
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
+    const account = signer.getAddress();
     setProvider(provider)
     setSigner(signer)
+    setAccount(account)
   }
 
 
@@ -71,6 +77,9 @@ function App() {
               <Route path="/" element={<Body />} />
               <Route path="/header" element={<Header />} />
               <Route path="/tokenaddress" element={<TokenPage provid={provider} sign={signer} />} />
+              <Route path="/merkleroot" element={<MerkleRootComponet provid={provider} sign={signer} address={account}/>} />
+              <Route path="/createairdrop" element={<CreateAirdrop provid={provider} sign={signer} />} />
+              <Route path="/airdrops" element={<Airdrops provid={provider} sign={signer} />} />
             </Routes>
           </Router>
         </RainbowKitProvider>

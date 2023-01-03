@@ -1,9 +1,9 @@
 import { Button, TextField } from '@mui/material'
 import CloseOutlinedIcon from '@mui/icons-material/CloseOutlined';
-import React, { useState,useEffect } from 'react';
+import React, { useState } from 'react';
 import {tokenFactoryContractAddress,TokenFactoryContract_ABI,TokenContract_ABI} from '../config'
 
-const {ethers, Contract, BigNumber} = require('ethers');
+const {ethers} = require('ethers');
 
 function NewToken(props) {
 

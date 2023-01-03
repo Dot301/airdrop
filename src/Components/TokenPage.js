@@ -1,27 +1,31 @@
-import React, { Children, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import { Modal } from '@mui/material';
 import NewToken from './NewToken';
 import Tokens from './Tokens';
-import {tokenFactoryContractAddress,TokenFactoryContract_ABI,TokenContract_ABI} from '../config'
-const {ethers, Contract, BigNumber} = require('ethers');
+import { tokenFactoryContractAddress, TokenFactoryContract_ABI, TokenContract_ABI } from '../config'
+
+const { ethers, Contract, BigNumber } = require('ethers');
 
 function TokenPage(props) {
 
     const [open, setOpen] = useState(false);
     const [_data, setData] = useState([]);
-    const [_tokenfactory,setTokenFactory] = useState();
+    // const [tokenaddresses, setTokenAddresses] = useState([]);
     let data1 = new Set();
-    useEffect(()=>{
-        if(props.provid == undefined) return 
-        const load = async ()=>{
+    useEffect(() => {
+        if (props.provid === undefined) return
+        const load = async () => {
             let tokenfactory, data;
-            tokenfactory = new ethers.Contract(tokenFactoryContractAddress,TokenFactoryContract_ABI,props.provid);
+            tokenfactory = new ethers.Contract(tokenFactoryContractAddress, TokenFactoryContract_ABI, props.provid);
             data = await tokenfactory.tokenslist();
-            fetchTokenData(data)
+            if (data.length === 0) return
+            fetchTokenData(data);
+            // setTokenAddresses(data);
+            // console.log(tokenaddresses)
         }
         load();
-    },[props.provid])
+    }, [props.provid])
 
     const handleOpen = () => {
         // console.log(props.accou)
@@ -33,19 +37,19 @@ function TokenPage(props) {
     };
 
 
-    const fetchTokenData = async (_data) =>{
-        // console.log(_data)
+    const fetchTokenData = async (_data) => {
+        // console.log(tokenaddresses)
         let tokenAddressInstance;
-        let _totalSupply,_totalSupplyHex;
-        let _decimals,_name,_symbol;
-        for(let i=_data.length-1;i>=0;i--){
-            tokenAddressInstance = new Contract(_data[i],TokenContract_ABI,props.provid);
+        let _totalSupply, _totalSupplyHex;
+        let _decimals, _name, _symbol;
+        for (let i = _data.length - 1; i >= 0; i--) {
+            tokenAddressInstance = new Contract(_data[i], TokenContract_ABI, props.provid);
             _totalSupplyHex = BigNumber.from((await tokenAddressInstance.totalSupply()).toString())
             _totalSupply = parseInt(_totalSupplyHex._hex)
             _decimals = await tokenAddressInstance.decimals()
             _symbol = await tokenAddressInstance.symbol()
             _name = await tokenAddressInstance.name()
-            data1.add({"totalSupply" : _totalSupply, "decimals" : _decimals, "name" : _name,"symbol" : _symbol})
+            data1.add({ "totalSupply": _totalSupply, "decimals": _decimals, "name": _name, "symbol": _symbol })
             // setData(Array.from(data1))
         }
         // console.log(data1)
@@ -62,7 +66,7 @@ function TokenPage(props) {
                                 placeholder="Search your token"
                                 aria-label="Search"
                                 aria-describedby="button-addon2" />
-                            <div className=''>
+                            <div className='search w-10 flex items-center justify-center cursor-pointer'>
                                 <SearchRoundedIcon />
                             </div>
                         </div>
@@ -75,8 +79,8 @@ function TokenPage(props) {
                     <div className='tokentitle mx-10 text-3xl font-mono'>All your tokens.</div>
                     <div className='tokens w-3/4 h-3/4 border border-red-500 rounded-lg grid grid-cols-5 overflow-scroll'>
                         {
-                            _data.map((data,index)=>{
-                                return (<Tokens data={data} key={index}/>);
+                            _data.map((data, index) => {
+                                return (<Tokens data={data} key={index} />);
                             })
                         }
                     </div>
@@ -89,7 +93,7 @@ function TokenPage(props) {
                 aria-describedby="simple-modal-description"
             >
                 <div>
-                    <NewToken provider={props.provid}  account={props.accou} signer={props.sign} close={handleClose}/>
+                    <NewToken provider={props.provid} account={props.accou} signer={props.sign} close={handleClose} />
                 </div>
             </Modal>
         </>

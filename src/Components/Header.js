@@ -11,7 +11,7 @@ function Header() {
       <div className='w-3/4'>
         <Link to={'/'}><h1 className='flex-1 pl-20 text-4xl ml-20 font-mono'>AIRDROP</h1></Link>
       </div>
-      <nav className='pr-[20rem] flex flex-row'>
+      <nav className='pr-[10rem] flex flex-row'>
         <ul className='container flex-row flex h-max'>
           <li className='mx-20 cursor-pointer h-[60px]'>
             <div className='w-48'>
@@ -27,21 +27,20 @@ function Header() {
               Airdrop
               <KeyboardArrowDownIcon className='text-sm' />
             </button>
-            <div className='peer-hover:flex hover:flex w-[200px] drop-shadow-lg hidden absolute flex-col bg-slate-900 z-10'>
-              <a className='hover:bg-slate-100 hover:text-black px-5 py-3'>Create Merkle Root</a>
-              <a className='hover:bg-slate-100 hover:text-black px-5 py-3'>Create Airdrop</a>
-              <a className='hover:bg-slate-100 hover:text-black px-5 py-3'>Airdrops</a>
+            <div className='peer-hover:flex justify-center hover:flex w-[200px] drop-shadow-lg hidden absolute flex-col bg-slate-900 z-10'>
+              <Link to={'/merkleroot'}><div className='flex items-center hover:bg-slate-100 h-[20px] hover:text-black px-5 py-5'>Create Merkle Root</div></Link>
+              <Link to={'/createairdrop'}><div className='flex items-center hover:bg-slate-100 h-[20px] hover:text-black px-5 py-5'>Create Airdrop</div></Link>
+              <Link to={'/airdrops'}><div className='flex items-center hover:bg-slate-100 h-[20px] hover:text-black px-5 py-5'>Airdrops</div></Link>
             </div>
-
           </li>
         </ul>
-        <div className='w-[300px] flex items-center justify-end '>
+      </nav>
+        <div className='flex items-center justify-start'>
           <ConnectButton accountStatus={{
             smallScreen: 'avatar',
             largeScreen: 'full',
           }} />
         </div>
-      </nav>
     </div>
   )
 }
